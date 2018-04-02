@@ -56,11 +56,37 @@ cd /home/$USER
 rm -rf "$SHELL_EXT_DOWNLOAD_DIR"
 
 # Plank
-plank_themes_dir="/home/$USER/.local/share/plank/themes"
-plank_launchers_dir="/home/$USER/.config/plank/dock1/launchers"
-rm -rf "$plank_themes_dir"
-rm -rf "$plank_launchers_dir"
-mkdir -p "$plank_themes_dir"
-mkdir -p "$plank_launchers_dir"
-cp -r "./resources/plank/themes/Arc-Dark" "$plank_themes_dir"
-cp ./resources/plank/launchers/* "$plank_launchers_dir"
+function plank_docklet_def {
+	echo -e "[PlankDockItemPreferences]\nLauncher=docklet://$1"
+}
+
+function plank_app_def {
+	echo -e "[PlankDockItemPreferences]\nLauncher=file://$DESKTOP_FILES_DIR/$1.desktop"
+}
+
+function plank_snap_app_def {
+	echo -e "[PlankDockItemPreferences]\nLauncher=file://$SNAP_DESKTOP_FILES_DIR/$1.desktop"
+}
+
+PLANK_THEMES_DIR="/home/vagrant/.local/share/plank/themes"
+PLANK_LAUNCHERS_DIR="/home/vagrant/.config/plank/dock1/launchers"
+rm -rf "$PLANK_THEMES_DIR"
+rm -rf "$PLANK_LAUNCHERS_DIR"
+mkdir -p "$PLANK_THEMES_DIR"
+mkdir -p "$PLANK_LAUNCHERS_DIR"
+cp -r "/vagrant/resources/plank/themes/Arc-Dark" "$PLANK_THEMES_DIR"
+PLANK_DOCKLETS=("desktop" "trash")
+PLANK_APPS=("nautilus" "firefox" "thunderbird" "gnome-system-monitor" "gnome-terminal" "sublime_text")
+PLANK_SNAP_APPS=("spotify_spotify")
+
+for PLANK_DOCKLET in "${PLANK_DOCKLETS[@]}"; do
+	plank_docklet_def $PLANK_DOCKLET > "$PLANK_LAUNCHERS_DIR/$PLANK_DOCKLET.dockitem"
+done
+
+for PLANK_APP in "${PLANK_APPS[@]}"; do
+	plank_app_def $PLANK_APP > "$PLANK_LAUNCHERS_DIR/$PLANK_APP.dockitem"
+done
+
+for PLANK_SNAP_APP in "${PLANK_SNAP_APPS[@]}"; do
+	plank_snap_app_def $PLANK_SNAP_APP > "$PLANK_LAUNCHERS_DIR/$PLANK_SNAP_APP.dockitem"
+done
