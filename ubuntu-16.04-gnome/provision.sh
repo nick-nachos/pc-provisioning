@@ -90,3 +90,5 @@ done
 for PLANK_SNAP_APP in "${PLANK_SNAP_APPS[@]}"; do
 	plank_snap_app_def $PLANK_SNAP_APP > "$PLANK_LAUNCHERS_DIR/$PLANK_SNAP_APP.dockitem"
 done
+
+cat ./resources/plank/plank.dconf | dconf load /net/launchpad/plank/docks/
