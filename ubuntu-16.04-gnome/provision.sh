@@ -19,17 +19,15 @@ plank thunderbird sublime-text gimp
 sudo snap install spotify
 sudo snap install --classic skype
 
-user=$(whoami)
-
 # Templates
-touch "/home/$user/Templates/Text File.txt"
+touch "/home/$USER/Templates/Text File.txt"
 
 # Gnome Shell Extensions
-cp -r ./resources/gnome-shell/extensions "/home/$user/.local/share/gnome-shell"
+cp -r ./resources/gnome-shell/extensions "/home/$USER/.local/share/gnome-shell"
 
 # Plank
-plank_themes_dir="/home/$user/.local/share/plank/themes"
-plank_launchers_dir="/home/$user/.config/plank/dock1/launchers"
+plank_themes_dir="/home/$USER/.local/share/plank/themes"
+plank_launchers_dir="/home/$USER/.config/plank/dock1/launchers"
 rm -rf "$plank_themes_dir"
 rm -rf "$plank_launchers_dir"
 mkdir -p "$plank_themes_dir"
@@ -39,5 +37,5 @@ cp ./resources/plank/launchers/* "$plank_launchers_dir"
 
 # Startup applications
 apps_dir="/usr/share/applications"
-autostart_dir="/home/$user/.config/autostart"
+autostart_dir="/home/$USER/.config/autostart"
 cp "$apps_dir/plank.desktop" "$autostart_dir"
