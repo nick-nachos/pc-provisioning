@@ -32,7 +32,28 @@ cp "$DESKTOP_FILES_DIR/plank.desktop" "$AUTOSTART_DIR"
 cp "$SNAP_DESKTOP_FILES_DIR/skype_skypeforlinux.desktop" "$AUTOSTART_DIR"
 
 # Gnome Shell Extensions
-cp -r ./resources/gnome-shell/extensions "/home/$USER/.local/share/gnome-shell"
+SHELL_EXT_DIR="/home/$USER/.local/share/gnome-shell/extensions"
+SHELL_EXT_DOWNLOAD_DIR="/home/$USER/Downloads/gnome-shell-extensions"
+
+mkdir -p "$SHELL_EXT_DIR"
+mkdir -p "$SHELL_EXT_DOWNLOAD_DIR"
+cd "$SHELL_EXT_DOWNLOAD_DIR"
+
+wget https://extensions.gnome.org/extension-data/ShellTile@emasab.it.v50.shell-extension.zip
+wget https://extensions.gnome.org/extension-data/CoverflowAltTab@palatis.blogspot.com.v32.shell-extension.zip
+
+SHELL_EXT_REGEX="(.+)\.v[0-9]+\.shell-extension\.zip"
+
+for SHELL_EXT_ZIP in $(ls); do
+	if [[ $SHELL_EXT_ZIP =~ $SHELL_EXT_REGEX ]]; then
+		SHELL_EXT="${BASH_REMATCH[1]}"
+		unzip "$SHELL_EXT_ZIP" -d "$SHELL_EXT"
+		cp -r "$SHELL_EXT" "$SHELL_EXT_DIR"
+	fi
+done
+
+cd /home/$USER
+rm -rf "$SHELL_EXT_DOWNLOAD_DIR"
 
 # Plank
 plank_themes_dir="/home/$USER/.local/share/plank/themes"
