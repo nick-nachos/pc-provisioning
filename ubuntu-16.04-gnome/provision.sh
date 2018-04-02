@@ -19,8 +19,17 @@ plank thunderbird sublime-text gimp
 sudo snap install spotify
 sudo snap install --classic skype
 
+DESKTOP_FILES_DIR="/usr/share/applications"
+SNAP_DESKTOP_FILES_DIR="/var/lib/snapd/desktop/applications"
+
 # Templates
 touch "/home/$USER/Templates/Text File.txt"
+
+# Startup applications
+AUTOSTART_DIR="/home/vagrant/.config/autostart"
+mkdir -p "$AUTOSTART_DIR"
+cp "$DESKTOP_FILES_DIR/plank.desktop" "$AUTOSTART_DIR"
+cp "$SNAP_DESKTOP_FILES_DIR/skype_skypeforlinux.desktop" "$AUTOSTART_DIR"
 
 # Gnome Shell Extensions
 cp -r ./resources/gnome-shell/extensions "/home/$USER/.local/share/gnome-shell"
@@ -34,8 +43,3 @@ mkdir -p "$plank_themes_dir"
 mkdir -p "$plank_launchers_dir"
 cp -r "./resources/plank/themes/Arc-Dark" "$plank_themes_dir"
 cp ./resources/plank/launchers/* "$plank_launchers_dir"
-
-# Startup applications
-apps_dir="/usr/share/applications"
-autostart_dir="/home/$USER/.config/autostart"
-cp "$apps_dir/plank.desktop" "$autostart_dir"
