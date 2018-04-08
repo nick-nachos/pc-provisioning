@@ -12,7 +12,7 @@ apt-get upgrade
 
 apt-get install -y \
 dkms build-essential git vim \
-synaptic apt-xapian-index \
+synaptic apt-xapian-index gnome-tweak-tool snapd \
 arc-theme paper-icon-theme paper-cursor-theme \
 plank thunderbird sublime-text gimp
 
