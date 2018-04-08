@@ -1,24 +1,5 @@
 #!/usr/bin/env bash
 
-sudo add-apt-repository -y ppa:noobslab/themes
-sudo add-apt-repository -y ppa:noobslab/icons
-sudo add-apt-repository -y ppa:snwh/pulp
-
-wget -qO - https://download.sublimetext.com/sublimehq-pub.gpg | sudo apt-key add -
-echo "deb https://download.sublimetext.com/ apt/stable/" | sudo tee /etc/apt/sources.list.d/sublime-text.list
-
-sudo apt-get update
-sudo apt-get upgrade
-
-sudo apt-get install -y \
-dkms build-essential git vim \
-synaptic apt-xapian-index \
-arc-theme paper-icon-theme paper-cursor-theme \
-plank thunderbird sublime-text gimp
-
-sudo snap install spotify
-sudo snap install --classic skype
-
 DESKTOP_FILES_DIR="/usr/share/applications"
 SNAP_DESKTOP_FILES_DIR="/var/lib/snapd/desktop/applications"
 
