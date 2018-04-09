@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 
+WORK_DIR=$(pwd -P)
 DESKTOP_FILES_DIR="/usr/share/applications"
 SNAP_DESKTOP_FILES_DIR="/var/lib/snapd/desktop/applications"
 
@@ -7,7 +8,7 @@ SNAP_DESKTOP_FILES_DIR="/var/lib/snapd/desktop/applications"
 touch "/home/$USER/Templates/Text File.txt"
 
 # Startup applications
-AUTOSTART_DIR="/home/vagrant/.config/autostart"
+AUTOSTART_DIR="/home/$USER/.config/autostart"
 mkdir -p "$AUTOSTART_DIR"
 cp "$DESKTOP_FILES_DIR/plank.desktop" "$AUTOSTART_DIR"
 cp "$SNAP_DESKTOP_FILES_DIR/skype_skypeforlinux.desktop" "$AUTOSTART_DIR"
@@ -49,13 +50,13 @@ function plank_snap_app_def {
 	echo -e "[PlankDockItemPreferences]\nLauncher=file://$SNAP_DESKTOP_FILES_DIR/$1.desktop"
 }
 
-PLANK_THEMES_DIR="/home/vagrant/.local/share/plank/themes"
-PLANK_LAUNCHERS_DIR="/home/vagrant/.config/plank/dock1/launchers"
+PLANK_THEMES_DIR="/home/$USER/.local/share/plank/themes"
+PLANK_LAUNCHERS_DIR="/home/$USER/.config/plank/dock1/launchers"
 rm -rf "$PLANK_THEMES_DIR"
 rm -rf "$PLANK_LAUNCHERS_DIR"
 mkdir -p "$PLANK_THEMES_DIR"
 mkdir -p "$PLANK_LAUNCHERS_DIR"
-cp -r "/vagrant/resources/plank/themes/Arc-Dark" "$PLANK_THEMES_DIR"
+cp -r "$WORK_DIR/resources/plank/themes/Arc-Dark" "$PLANK_THEMES_DIR"
 PLANK_DOCKLETS=("desktop" "trash")
 PLANK_APPS=("nautilus" "firefox" "thunderbird" "gnome-system-monitor" "gnome-terminal" "sublime_text")
 PLANK_SNAP_APPS=("spotify_spotify")
