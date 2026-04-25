@@ -37,7 +37,7 @@ sudo apt update && sudo apt upgrade -y
 
 echo "Installing distro packages..."
 sudo apt install -y \
-    apt-transport-https curl bash-completion \
+    apt-transport-https curl bash-completion htop \
     apt-xapian-index synaptic gnome-shell-extension-manager \
     zsh zsh-autosuggestions zsh-syntax-highlighting \
     build-essential git vim meld \
