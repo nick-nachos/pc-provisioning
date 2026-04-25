@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+set -eo pipefail
 
 # ------------------ System Provisioning ------------------
 
@@ -33,99 +34,51 @@ add_proton_vpn_repo() {
 
 echo "Updating repositories and upgrading the system..."
 sudo apt update && sudo apt upgrade -y
-if [ "$?" -ne 0 ]; then
-    echo "Error: Failed to update and upgrade the system."
-    exit 1
-fi
 
 echo "Installing distro packages..."
 sudo apt install -y \
     apt-transport-https curl bash-completion \
     apt-xapian-index synaptic gnome-shell-extension-manager \
     zsh zsh-autosuggestions zsh-syntax-highlighting \
-    dkms build-essential git vim meld \
-    qemu-kvm libvirt-daemon-system libvirt-clients bridge-utils virtinst build-essential ruby-dev libvirt-dev \
-    virtualbox virtualbox-qt virtualbox-guest-additions-iso virtualbox-guest-utils virtualbox-guest-x11 \
+    build-essential git vim meld \
+    qemu-kvm libvirt-daemon-system libvirt-clients bridge-utils virtinst ruby-dev libvirt-dev \
+    gnome-boxes virt-manager \
     gimp qpdf \
     texlive texlive-fonts-extra latexmk # latex support for moderncv
-if [ "$?" -ne 0 ]; then
-    echo "Error: Failed to install distro packages."
-    exit 1
-fi
 
 echo "Installing snap packages..."
 sudo snap install signal-desktop slack spotify steam && \
 sudo snap install --classic code
-if [ "$?" -ne 0 ]; then
-    echo "Error: Failed to install snap packages."
-    exit 1
-fi
 
 echo "Adding Brave browser repository..."
 add_brave_browser_repo
-if [ "$?" -ne 0 ]; then
-    echo "Error: Failed to add Brave browser repository."
-    exit 1
-fi
 
 echo "Adding 1Password repository..."
 add_1password_repo
-if [ "$?" -ne 0 ]; then
-    echo "Error: Failed to add 1Password repository."
-    exit 1
-fi
 
 echo "Adding Vagrant repository..."
 add_vagrant_repo
-if [ "$?" -ne 0 ]; then
-    echo "Error: Failed to add Vagrant repository."
-    exit 1
-fi
 
 echo "Installing third-party repository applications..."
 sudo apt update && sudo apt install -y brave-browser 1password vagrant
-if [ "$?" -ne 0 ]; then
-    echo "Error: Failed to install third-party repository applications."
-    exit 1
-fi
 
 # Download Proton Mail Bridge installer into ~/Downloads
 PROTON_BRIDGE_DEB=protonmail-bridge_3.23.1-1_amd64.deb
 wget -O "$HOME/Downloads/$PROTON_BRIDGE_DEB" https://proton.me/download/bridge/$PROTON_BRIDGE_DEB && \
 sudo apt install -y "$HOME/Downloads/$PROTON_BRIDGE_DEB"
-if [ "$?" -ne 0 ]; then
-    echo "Error: Failed to install Proton Mail Bridge."
-    exit 1
-fi
 
 echo "Adding Proton VPN repository..."
 add_proton_vpn_repo
-if [ "$?" -ne 0 ]; then
-    echo "Error: Failed to add Proton VPN repository."
-    exit 1
-fi
 
 sudo apt update && sudo apt install -y proton-vpn-gnome-desktop
-if [ "$?" -ne 0 ]; then
-    echo "Error: Failed to install Proton VPN."
-    exit 1
-fi
 
 # ------------------ User Provisioning ------------------
 
 echo "Adding $USER to groups..."
 sudo usermod -aG kvm,libvirt $USER
-if [ "$?" -ne 0 ]; then
-    echo "Error: Failed to add user to groups."
-    exit 1
-fi
 
 echo "Setting default user shell for $USER to ZSH..."
 sudo chsh -s $(which zsh) "$USER"
-if [ "$?" -ne 0 ]; then
-    echo "Error: Failed to change user shell to ZSH."
-    exit 1
-fi
 
 echo "Setting favorite apps..."
 gsettings set org.gnome.shell favorite-apps "[
@@ -144,19 +97,11 @@ gsettings set org.gnome.shell favorite-apps "[
     'org.gnome.Terminal.desktop', 
     'code_code.desktop'
 ]"
-if [ "$?" -ne 0 ]; then
-    echo "Error: Failed to set favorite apps."
-    exit 1
-fi
 
 mkdir -p "$HOME/workspace/github/nick-nachos"
 
 echo "Installing oh-my-zsh..."
 sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
-if [ "$?" -ne 0 ]; then
-    echo "Error: Failed to install oh-my-zsh."
-    exit 1
-fi
 
 echo "Deploying ZSH plugins..."
 rm -rf ~/.oh-my-zsh/custom/plugins/zsh-autosuggestions && \
@@ -165,10 +110,6 @@ ln -s /usr/share/zsh-autosuggestions/zsh-autosuggestions.zsh ~/.oh-my-zsh/custom
 rm -rf ~/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting && \
 mkdir -p ~/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting && \
 ln -s /usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh ~/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.plugin.zsh
-if [ "$?" -ne 0 ]; then
-    echo "Error: Failed to deploy ZSH plugins."
-    exit 1
-fi
 
 echo "Enabling ZSH plugins..."
 # Enable ZSH plugins
@@ -180,7 +121,3 @@ plugin_list=(
 )
 plugins="${plugin_list[*]}"
 sed -i.plugins.bak -E "s/^(plugins=\()[^)]*\)/\1${plugins})/" ~/.zshrc
-if [ "$?" -ne 0 ]; then
-    echo "Error: Failed to enable ZSH plugins."
-    exit 1
-fi
